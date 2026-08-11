@@ -72,9 +72,9 @@ function generateSeedData(): RoomRecord[] {
   const records: RoomRecord[] = [];
   let idCounter = 1;
 
-  // Generate 7 days of historical screen time
+  // Generate 14 days of historical screen time
   const today = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 14; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
     const dateStr = d.toISOString().split('T')[0];

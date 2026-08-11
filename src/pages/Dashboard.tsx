@@ -1,12 +1,26 @@
 import React from 'react';
 import { AppUsage, DayUsage } from '../types/usage';
 import { formatMinutesToHours, formatMinutesFull, formatDateIndonesian, getAppMeta } from '../lib/formatters';
-import { Clock, TrendingUp, TrendingDown, AppWindow, Calendar, ChevronRight, Layers, Award } from 'lucide-react';
+import {
+  Clock,
+  TrendingUp,
+  TrendingDown,
+  AppWindow,
+  Calendar,
+  ChevronRight,
+  Layers,
+  Award,
+  BarChart3,
+  ArrowUpRight,
+  ArrowDownRight,
+  Sparkles,
+} from 'lucide-react';
 
 interface DashboardProps {
   todayUsage: DayUsage | null;
   yesterdayUsage: DayUsage | null;
   last7DaysUsage: DayUsage[];
+  last14DaysUsage?: DayUsage[];
   onSelectApp: (app: AppUsage) => void;
   onNavigateHistory: () => void;
 }
@@ -15,6 +29,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   todayUsage,
   yesterdayUsage,
   last7DaysUsage,
+  last14DaysUsage,
   onSelectApp,
   onNavigateHistory,
 }) => {
@@ -28,6 +43,28 @@ export const Dashboard: React.FC<DashboardProps> = ({
   // Calculate 7 day average
   const total7DaysMins = last7DaysUsage.reduce((acc, d) => acc + d.totalMinutes, 0);
   const avg7DaysMins = last7DaysUsage.length > 0 ? Math.round(total7DaysMins / last7DaysUsage.length) : 0;
+
+  // Weekly comparison calculations (Past 7 days vs Previous 7 days)
+  const pastWeekDays = (last14DaysUsage || last7DaysUsage).slice(0, 7);
+  const prevWeekDays = (last14DaysUsage || []).slice(7, 14);
+
+  const totalPastWeekMins = pastWeekDays.reduce((acc, d) => acc + d.totalMinutes, 0);
+  const avgPastWeekMins = pastWeekDays.length > 0 ? Math.round(totalPastWeekMins / pastWeekDays.length) : 0;
+
+  const totalPrevWeekMins = prevWeekDays.reduce((acc, d) => acc + d.totalMinutes, 0);
+  const avgPrevWeekMins = prevWeekDays.length > 0 ? Math.round(totalPrevWeekMins / prevWeekDays.length) : 0;
+
+  const diffAvgMins = avgPastWeekMins - avgPrevWeekMins;
+  const isAvgHigher = diffAvgMins > 0;
+  const isAvgEqual = diffAvgMins === 0;
+
+  const weeklyPercentChange = avgPrevWeekMins > 0
+    ? Math.round((Math.abs(diffAvgMins) / avgPrevWeekMins) * 100)
+    : 0;
+
+  const maxWeeklyAvg = Math.max(avgPastWeekMins, avgPrevWeekMins, 1);
+  const pastWeekBarWidth = Math.max(12, Math.round((avgPastWeekMins / maxWeeklyAvg) * 100));
+  const prevWeekBarWidth = Math.max(12, Math.round((avgPrevWeekMins / maxWeeklyAvg) * 100));
 
   // Top 5 apps today
   const topAppsToday = todayUsage?.apps.slice(0, 5) || [];
@@ -109,6 +146,145 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Weekly Screen Time Summary Card */}
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/40">
+              <BarChart3 className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                Perbandingan Rata-Rata Mingguan
+              </h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                Rata-rata screen time harian minggu ini vs minggu lalu
+              </p>
+            </div>
+          </div>
+
+          {/* Comparison Status Badge */}
+          {avgPrevWeekMins > 0 && (
+            <div className="self-start sm:self-auto">
+              <div
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
+                  isAvgHigher
+                    ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60'
+                    : isAvgEqual
+                    ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
+                    : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60'
+                }`}
+              >
+                {isAvgHigher ? (
+                  <>
+                    <ArrowUpRight className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    <span>+{weeklyPercentChange}% ({formatMinutesToHours(Math.abs(diffAvgMins))}/hari lebih tinggi)</span>
+                  </>
+                ) : isAvgEqual ? (
+                  <span>Penggunaan stabil (Sama dengan minggu lalu)</span>
+                ) : (
+                  <>
+                    <ArrowDownRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span>-{weeklyPercentChange}% ({formatMinutesToHours(Math.abs(diffAvgMins))}/hari lebih hemat)</span>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Dual Metric Bars */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          {/* Past 7 Days Metric Box */}
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800 rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
+                Minggu Ini (7 Hari Terakhir)
+              </span>
+              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+                Total {formatMinutesToHours(totalPastWeekMins)}
+              </span>
+            </div>
+
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+                {formatMinutesToHours(avgPastWeekMins)}
+                <span className="text-xs font-normal text-zinc-500 dark:text-zinc-400 ml-1">/ hari</span>
+              </div>
+            </div>
+
+            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700/60 h-2.5 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-all duration-500"
+                style={{ width: `${pastWeekBarWidth}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Previous 7 Days Metric Box */}
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800 rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+                Minggu Lalu (Hari 8-14)
+              </span>
+              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+                Total {formatMinutesToHours(totalPrevWeekMins)}
+              </span>
+            </div>
+
+            <div className="flex items-baseline justify-between">
+              <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+                {formatMinutesToHours(avgPrevWeekMins)}
+                <span className="text-xs font-normal text-zinc-500 dark:text-zinc-400 ml-1">/ hari</span>
+              </div>
+            </div>
+
+            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700/60 h-2.5 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-zinc-400 dark:bg-zinc-500 rounded-full transition-all duration-500"
+                style={{ width: `${prevWeekBarWidth}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Insight Callout */}
+        {avgPrevWeekMins > 0 && (
+          <div className="bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-3.5 flex items-start gap-3">
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+              {isAvgHigher ? (
+                <>
+                  Rata-rata penggunaan HP Anda minggu ini naik{' '}
+                  <span className="font-bold text-amber-700 dark:text-amber-300">
+                    {formatMinutesToHours(Math.abs(diffAvgMins))} per hari
+                  </span>{' '}
+                  dibandingkan minggu lalu. Coba atur pembatasan aplikasi untuk menjaga keseimbangan.
+                </>
+              ) : isAvgEqual ? (
+                <>
+                  Rata-rata screen time harian Anda stabil di angka{' '}
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                    {formatMinutesToHours(avgPastWeekMins)} per hari
+                  </span>
+                  , sama dengan minggu sebelumnya.
+                </>
+              ) : (
+                <>
+                  Luar biasa! Rata-rata screen time harian Anda hemat{' '}
+                  <span className="font-bold text-emerald-700 dark:text-emerald-300">
+                    {formatMinutesToHours(Math.abs(diffAvgMins))} per hari
+                  </span>{' '}
+                  dibanding minggu lalu. Pertahankan kebiasaan digital yang baik ini!
+                </>
+              )}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Top 5 Apps Section */}

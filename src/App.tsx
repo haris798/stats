@@ -50,6 +50,7 @@ export default function App() {
   const [todayUsage, setTodayUsage] = useState<DayUsage | null>(null);
   const [yesterdayUsage, setYesterdayUsage] = useState<DayUsage | null>(null);
   const [last7DaysUsage, setLast7DaysUsage] = useState<DayUsage[]>([]);
+  const [last14DaysUsage, setLast14DaysUsage] = useState<DayUsage[]>([]);
   const [syncStatus, setSyncStatusState] = useState<SyncStatus | null>(null);
 
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
@@ -85,13 +86,14 @@ export default function App() {
       const yesterdayData = await getUsageForDate(yesterdayStr);
       setYesterdayUsage(yesterdayData);
 
-      // 4. Fetch last 7 days history
+      // 4. Fetch last 14 days history
       const historyPromises: Promise<DayUsage>[] = [];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < 14; i++) {
         historyPromises.push(getUsageForDate(getOffsetDateStr(i)));
       }
-      const history7 = await Promise.all(historyPromises);
-      setLast7DaysUsage(history7);
+      const history14 = await Promise.all(historyPromises);
+      setLast14DaysUsage(history14);
+      setLast7DaysUsage(history14.slice(0, 7));
 
       // 5. Sync status
       const status = await getSyncStatus();
@@ -215,6 +217,7 @@ export default function App() {
                 todayUsage={todayUsage}
                 yesterdayUsage={yesterdayUsage}
                 last7DaysUsage={last7DaysUsage}
+                last14DaysUsage={last14DaysUsage}
                 onSelectApp={(app) => setSelectedApp(app)}
                 onNavigateHistory={() => setActiveTab('history')}
               />
