@@ -224,6 +224,8 @@ export default function App() {
               <HistoryPage
                 historyDays={last7DaysUsage}
                 onSelectApp={(app) => setSelectedApp(app)}
+                onSyncNow={() => handleSyncNow()}
+                onNavigateSettings={() => setActiveTab('settings')}
               />
             )}
 
@@ -231,6 +233,8 @@ export default function App() {
               <AppsList
                 todayUsage={todayUsage}
                 onSelectApp={(app) => setSelectedApp(app)}
+                onSyncNow={() => handleSyncNow()}
+                onNavigateSettings={() => setActiveTab('settings')}
               />
             )}
 

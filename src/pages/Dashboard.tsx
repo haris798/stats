@@ -46,9 +46,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold tracking-wider uppercase text-indigo-200/80 flex items-center gap-1.5">
+            <span className="text-xs font-semibold tracking-wider text-indigo-200/80 flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
-              SCREEN TIME HARI INI
+              Screen Time Hari Ini
             </span>
             <span className="text-xs font-medium px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-indigo-100">
               {todayUsage?.date ? formatDateIndonesian(todayUsage.date) : 'Hari Ini'}

@@ -204,7 +204,7 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
             <form onSubmit={handleSaveCredentials} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                  SUPABASE URL
+                  Supabase URL
                 </label>
                 <input
                   type="text"
@@ -217,7 +217,7 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                  SUPABASE ANON KEY (Public Client Key)
+                  Supabase Anon Key (Public Client Key)
                 </label>
                 <input
                   type="password"
