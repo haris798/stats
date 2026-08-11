@@ -44,16 +44,11 @@ jobs:
         run: |
           cd android
           if [ ! -f "gradlew" ]; then
-            echo "gradlew not found. Generating gradle wrapper..."
-            gradle wrapper || true
+            echo "gradlew not found. Generating gradle wrapper for Gradle 8.7..."
+            gradle wrapper --gradle-version 8.7
           fi
-          if [ -f "gradlew" ]; then
-            chmod +x gradlew
-            ./gradlew assembleDebug
-          else
-            echo "Falling back to system gradle assembleDebug..."
-            gradle assembleDebug
-          fi
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

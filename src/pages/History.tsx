@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { DayUsage, AppUsage } from '../types/usage';
 import { formatMinutesToHours, formatDateIndonesian, formatDateDayName, getAppMeta } from '../lib/formatters';
-import { Calendar as CalendarIcon, Clock, ChevronDown, ChevronUp, Download, Search, Smartphone, RefreshCw, ShieldCheck, ArrowRight, Inbox, Sparkles, XCircle } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, ChevronDown, ChevronUp, Download, Search, Smartphone, RefreshCw, ShieldCheck, ArrowRight, Inbox, Sparkles, XCircle, TrendingUp, Activity } from 'lucide-react';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 interface HistoryProps {
   historyDays: DayUsage[];
@@ -10,6 +11,31 @@ interface HistoryProps {
   onNavigateSettings?: () => void;
 }
 
+interface TooltipProps {
+  active?: boolean;
+  payload?: Array<{ payload: { date: string; formattedDate: string; totalMinutes: number; appCount: number } }>;
+}
+
+const CustomChartTooltip: React.FC<TooltipProps> = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-zinc-900/95 text-white p-3 rounded-2xl shadow-xl border border-zinc-700/60 backdrop-blur-md text-xs space-y-1">
+        <div className="font-bold text-zinc-300">
+          {formatDateDayName(data.date)} ({data.formattedDate})
+        </div>
+        <div className="text-indigo-400 font-black text-sm">
+          {formatMinutesToHours(data.totalMinutes)}
+        </div>
+        <div className="text-[11px] text-zinc-400">
+          {data.appCount} aplikasi tercatat
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, onSyncNow, onNavigateSettings }) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(
     historyDays.length > 0 ? historyDays[0].date : null
@@ -17,6 +43,18 @@ export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, 
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const activeDay = historyDays.find(d => d.date === selectedDate) || (historyDays.length > 0 ? historyDays[0] : null);
+
+  // Prepare 7-day trend chart data (chronological order)
+  const chartData = [...historyDays]
+    .slice(0, 7)
+    .reverse()
+    .map((day) => ({
+      date: day.date,
+      shortDay: formatDateDayName(day.date).slice(0, 3),
+      formattedDate: formatDateIndonesian(day.date),
+      totalMinutes: day.totalMinutes,
+      appCount: day.apps.length,
+    }));
 
   const filteredApps = activeDay?.apps.filter(app =>
     app.appName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -177,6 +215,83 @@ export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, 
           <span>Ekspor Data JSON</span>
         </button>
       </div>
+
+      {/* 7-Day Screen Time Trend Chart (Recharts) */}
+      {chartData.length > 0 && (
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                Tren Screen Time 7 Hari Terakhir
+              </h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                Klik titik pada grafik untuk berpindah ke tanggal tersebut
+              </p>
+            </div>
+            <div className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-full border border-indigo-100 dark:border-indigo-900/50">
+              <Activity className="w-3.5 h-3.5" />
+              <span>Grafik Interaktif</span>
+            </div>
+          </div>
+
+          <div className="h-52 w-full pt-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={chartData}
+                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                onClick={(e: any) => {
+                  if (e && e.activePayload && e.activePayload.length > 0) {
+                    const clickedDate = e.activePayload[0].payload.date;
+                    setSelectedDate(clickedDate);
+                  }
+                }}
+              >
+                <defs>
+                  <linearGradient id="colorMinutes" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#3f3f4622" />
+                <XAxis
+                  dataKey="shortDay"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 11, fill: '#888888' }}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 10, fill: '#888888' }}
+                  tickFormatter={(mins) => `${(mins / 60).toFixed(0)}j`}
+                />
+                <Tooltip content={<CustomChartTooltip />} />
+                <Area
+                  type="monotone"
+                  dataKey="totalMinutes"
+                  stroke="#6366f1"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorMinutes)"
+                  activeDot={{
+                    r: 6,
+                    fill: '#4f46e5',
+                    stroke: '#ffffff',
+                    strokeWidth: 2,
+                    className: 'cursor-pointer',
+                  }}
+                  dot={{
+                    r: 4,
+                    fill: '#6366f1',
+                    strokeWidth: 0,
+                  }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Dates List */}
