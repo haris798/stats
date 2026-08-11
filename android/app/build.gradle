@@ -38,8 +38,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Capacitor
-    implementation 'com.capacitorjs:core:6.0.0'
-    implementation 'com.capacitorjs:android:6.0.0'
+    implementation project(':capacitor-android')
 
     // Room Database
     implementation 'androidx.room:room-runtime:2.6.1'
