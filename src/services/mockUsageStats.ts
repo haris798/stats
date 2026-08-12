@@ -9,8 +9,8 @@ const MOCK_PERMISSION_KEY = 'stats_ku_permission_granted';
 // Initialize mock device ID
 function getMockDeviceId(): string {
   let id = localStorage.getItem(MOCK_DEVICE_ID_KEY);
-  if (!id) {
-    id = 'device_' + Math.random().toString(36).substring(2, 10) + Math.random().toString(36).substring(2, 10);
+  if (!id || id.startsWith('device_') || id.startsWith('android_')) {
+    id = 'haris / 25062RN2DY';
     localStorage.setItem(MOCK_DEVICE_ID_KEY, id);
   }
   return id;

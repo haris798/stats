@@ -87,26 +87,37 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
             </h2>
 
             <div className="space-y-4">
-              {/* Cards for Pending, Last Sync, Device ID */}
+              {/* Device Name / Model Display */}
+              <div className="bg-zinc-50 dark:bg-zinc-800/80 p-4 rounded-2xl border border-zinc-200 dark:border-zinc-700/80">
+                <div className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+                  Device ID (Nama & Model Perangkat):
+                </div>
+                <div className="text-sm font-extrabold text-indigo-600 dark:text-indigo-300 font-mono flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-indigo-500" />
+                  <span>{syncStatus?.deviceId || 'haris / 25062RN2DY'}</span>
+                </div>
+              </div>
+
+              {/* Cards for Pending & Last Sync */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Record Pending</div>
+                  <div className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">Record Pending</div>
                   <div className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-0.5">
                     {syncStatus?.pendingRecords || 0}
                   </div>
-                  <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
+                  <div className="text-[10px] text-zinc-400 dark:text-zinc-400 mt-1 font-medium">
                     Tersimpan di Room DB
                   </div>
                 </div>
 
                 <div className="bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-800">
-                  <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Terakhir Sync</div>
+                  <div className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">Terakhir Sync</div>
                   <div className="text-sm font-bold text-zinc-900 dark:text-zinc-100 mt-1">
                     {syncStatus?.lastSyncTime && syncStatus.lastSyncTime > 0
-                      ? new Date(syncStatus.lastSyncTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                      ? new Date(syncStatus.lastSyncTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
                       : 'Belum pernah'}
                   </div>
-                  <div className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
+                  <div className="text-[10px] text-zinc-400 dark:text-zinc-400 mt-1 font-medium">
                     {syncStatus?.lastSyncTime && syncStatus.lastSyncTime > 0
                       ? formatDateIndonesian(new Date(syncStatus.lastSyncTime).toISOString().split('T')[0])
                       : '-'}
@@ -114,14 +125,36 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
                 </div>
               </div>
 
-              <div className="bg-zinc-50 dark:bg-zinc-800/60 p-3.5 rounded-2xl border border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs">
-                <span className="text-zinc-500 dark:text-zinc-400">Device ID Persistent:</span>
-                <span className="font-mono font-semibold text-zinc-800 dark:text-zinc-200">{syncStatus?.deviceId}</span>
-              </div>
+              {/* Last Sync Status Banner */}
+              {syncStatus?.lastSyncStatus && syncStatus.lastSyncStatus !== 'NONE' && (
+                <div
+                  className={`p-3.5 rounded-2xl border flex items-start gap-3 text-xs font-semibold ${
+                    syncStatus.lastSyncStatus === 'SUCCESS'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800/80'
+                      : 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-200 border-rose-200 dark:border-rose-800/80'
+                  }`}
+                >
+                  {syncStatus.lastSyncStatus === 'SUCCESS' ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                  ) : (
+                    <AlertTriangle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                  )}
+                  <div>
+                    <div className="font-bold">
+                      Status Sync: {syncStatus.lastSyncStatus === 'SUCCESS' ? 'SUKSES TERHUBUNG' : 'GAGAL SINKRONISASI'}
+                    </div>
+                    {syncStatus.lastSyncMessage && (
+                      <p className="text-[11px] font-normal mt-0.5 leading-relaxed opacity-90">
+                        {syncStatus.lastSyncMessage}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Progress feedback box during sync */}
               {isSyncing && (
-                <div className="p-4 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 rounded-2xl text-indigo-900 dark:text-indigo-200 animate-pulse">
+                <div className="p-4 bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-800/80 rounded-2xl text-indigo-900 dark:text-indigo-200 animate-pulse">
                   <div className="flex items-center gap-2 text-xs font-bold mb-1">
                     <RefreshCw className="w-4 h-4 animate-spin text-indigo-600 dark:text-indigo-400" />
                     Proses Sinkronisasi Berjalan...
@@ -143,6 +176,59 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
                 <span>{isSyncing ? 'Proses Sync Berjalan...' : 'Sync Now (Manual Trigger)'}</span>
               </button>
             </div>
+          </div>
+
+          {/* Sync Logs Section */}
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
+            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 mb-1">
+              <Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              Riwayat Log Sinkronisasi
+            </h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
+              Catatan aktivitas & status pengiriman data ke Supabase REST API
+            </p>
+
+            {(!syncStatus?.syncLogs || syncStatus.syncLogs.length === 0) ? (
+              <div className="text-center py-6 text-zinc-400 dark:text-zinc-500 text-xs font-medium bg-zinc-50 dark:bg-zinc-800/40 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-700">
+                Belum ada riwayat log sinkronisasi tersimpan.
+              </div>
+            ) : (
+              <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+                {syncStatus.syncLogs.map((log) => {
+                  const logTime = new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                  const logDate = new Date(log.timestamp).toISOString().split('T')[0];
+
+                  return (
+                    <div
+                      key={log.id || log.timestamp}
+                      className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-100 dark:border-zinc-800 text-xs flex items-start justify-between gap-3"
+                    >
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-extrabold shrink-0 mt-0.5 ${
+                            log.status === 'SUCCESS'
+                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border dark:border-emerald-800'
+                              : log.status === 'FAILED'
+                              ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border dark:border-rose-800'
+                              : 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300'
+                          }`}
+                        >
+                          {log.status}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-zinc-800 dark:text-zinc-200 leading-snug break-words">
+                            {log.message}
+                          </p>
+                          <p className="text-[10px] text-zinc-400 dark:text-zinc-400 mt-0.5 font-mono">
+                            {formatDateIndonesian(logDate)} • {logTime}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Local Data Retention Settings */}

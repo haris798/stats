@@ -34,11 +34,19 @@ class SyncWorker(
             val anonKey = prefs.supabaseAnonKey
 
             if (supabaseUrl.isBlank() || anonKey.isBlank()) {
-                return@withContext Result.success() // Cannot sync without credentials, will try when configured
+                prefs.lastSyncStatus = "FAILED"
+                prefs.lastSyncMessage = "Supabase URL atau Anon Key belum dikonfigurasi."
+                prefs.addSyncLog("INFO", "Sync dilewati: Supabase URL/Key belum diisi.", 0)
+                return@withContext Result.success()
             }
 
             val pendingRecords = dao.getPendingSyncUsages()
             if (pendingRecords.isEmpty()) {
+                val now = System.currentTimeMillis()
+                prefs.lastSyncTime = now
+                prefs.lastSyncStatus = "SUCCESS"
+                prefs.lastSyncMessage = "Semua data lokal sudah tersinkronisasi."
+                prefs.addSyncLog("SUCCESS", "Sync selesai. Tidak ada data pending baru.", 0)
                 return@withContext Result.success()
             }
 
@@ -87,14 +95,27 @@ class SyncWorker(
                 val responseCode = conn.responseCode
                 if (responseCode in 200..299) {
                     dao.updateSyncStatus(recordIds, "SYNCED")
-                    prefs.lastSyncTime = System.currentTimeMillis()
+                    val now = System.currentTimeMillis()
+                    prefs.lastSyncTime = now
+                    prefs.lastSyncStatus = "SUCCESS"
+                    prefs.lastSyncMessage = "Berhasil mengunggah ${pendingRecords.size} record ke Supabase."
+                    prefs.addSyncLog("SUCCESS", "Sync berhasil (${pendingRecords.size} record terunggah ke Supabase)", pendingRecords.size)
                     Result.success()
                 } else {
+                    val errorStream = conn.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
+                    val errorMsg = "HTTP $responseCode: ${conn.responseMessage} ${if (errorStream.isNotBlank()) "- $errorStream" else ""}"
                     dao.updateSyncStatus(recordIds, "FAILED")
+                    prefs.lastSyncStatus = "FAILED"
+                    prefs.lastSyncMessage = errorMsg
+                    prefs.addSyncLog("FAILED", errorMsg, 0)
                     Result.retry()
                 }
             } catch (e: Exception) {
+                val errorMsg = "Gagal terhubung ke Supabase: ${e.message ?: "Connection error"}"
                 dao.updateSyncStatus(recordIds, "FAILED")
+                prefs.lastSyncStatus = "FAILED"
+                prefs.lastSyncMessage = errorMsg
+                prefs.addSyncLog("FAILED", errorMsg, 0)
                 Result.retry()
             }
         }

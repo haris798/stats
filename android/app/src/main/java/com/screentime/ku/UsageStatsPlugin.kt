@@ -154,6 +154,9 @@ class UsageStatsPlugin : Plugin() {
                     put("lastSyncTime", lastSync)
                     put("retentionDays", prefs.retentionDays)
                     put("supabaseConfigured", prefs.supabaseUrl.isNotBlank() && prefs.supabaseAnonKey.isNotBlank())
+                    put("lastSyncStatus", prefs.lastSyncStatus)
+                    put("lastSyncMessage", prefs.lastSyncMessage)
+                    put("syncLogsJson", prefs.getSyncLogsJson())
                 }
 
                 withContext(Dispatchers.Main) {
@@ -201,6 +204,8 @@ class UsageStatsPlugin : Plugin() {
                     put("success", syncWorkerResult is androidx.work.ListenableWorker.Result.Success)
                     put("pendingRemaining", pendingAfter)
                     put("lastSyncTime", prefs.lastSyncTime)
+                    put("lastSyncStatus", prefs.lastSyncStatus)
+                    put("lastSyncMessage", prefs.lastSyncMessage)
                 }
 
                 withContext(Dispatchers.Main) {

@@ -69,7 +69,15 @@ export async function getUsageForRange(startDate: string, endDate: string): Prom
 export async function getSyncStatus(): Promise<SyncStatus> {
   if (isNativeAndroid()) {
     try {
-      return await UsageStatsPlugin.getSyncStatus();
+      const res: any = await UsageStatsPlugin.getSyncStatus();
+      if (res.syncLogsJson && typeof res.syncLogsJson === 'string') {
+        try {
+          res.syncLogs = JSON.parse(res.syncLogsJson);
+        } catch (e) {
+          res.syncLogs = [];
+        }
+      }
+      return res;
     } catch (e) {
       console.warn('Native getSyncStatus failed:', e);
       return await MockUsageStatsProvider.getSyncStatus();

@@ -3,6 +3,8 @@ package com.screentime.ku
 import android.content.Context
 import android.content.SharedPreferences
 import android.provider.Settings
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.UUID
 
 class AppPreferences(private val context: Context) {
@@ -14,28 +16,36 @@ class AppPreferences(private val context: Context) {
         private const val KEY_LAST_SYNC_TIME = "last_sync_time"
         private const val KEY_SUPABASE_URL = "supabase_url"
         private const val KEY_SUPABASE_ANON_KEY = "supabase_anon_key"
+        private const val KEY_LAST_SYNC_STATUS = "last_sync_status"
+        private const val KEY_LAST_SYNC_MESSAGE = "last_sync_message"
+        private const val KEY_SYNC_LOGS = "sync_logs"
     }
 
     fun getDeviceId(): String {
-        val existingId = prefs.getString(KEY_DEVICE_ID, null)
-        if (!existingId.isNullOrBlank()) {
-            return existingId
-        }
-
-        val realAndroidId = try {
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        val deviceName = try {
+            Settings.Global.getString(context.contentResolver, "device_name")
+                ?: Settings.Secure.getString(context.contentResolver, "bluetooth_name")
         } catch (e: Exception) {
             null
         }
 
-        val deviceId = if (!realAndroidId.isNullOrBlank() && realAndroidId != "9774d56d682e549c") {
-            "android_$realAndroidId"
+        val model = android.os.Build.MODEL // e.g. "25062RN2DY"
+
+        val formattedDeviceId = if (!deviceName.isNullOrBlank()) {
+            "$deviceName / $model"
         } else {
-            "device_" + UUID.randomUUID().toString().replace("-", "").take(16)
+            "${android.os.Build.MANUFACTURER} / $model"
         }
 
-        prefs.edit().putString(KEY_DEVICE_ID, deviceId).apply()
-        return deviceId
+        val existingId = prefs.getString(KEY_DEVICE_ID, null)
+
+        // Upgrade/Update to new device name & model format if missing or starts with old android_/device_ prefix
+        if (existingId.isNullOrBlank() || existingId.startsWith("android_") || existingId.startsWith("device_")) {
+            prefs.edit().putString(KEY_DEVICE_ID, formattedDeviceId).apply()
+            return formattedDeviceId
+        }
+
+        return existingId
     }
 
     var retentionDays: Int
@@ -53,4 +63,42 @@ class AppPreferences(private val context: Context) {
     var supabaseAnonKey: String
         get() = prefs.getString(KEY_SUPABASE_ANON_KEY, "") ?: ""
         set(value) = prefs.edit().putString(KEY_SUPABASE_ANON_KEY, value).apply()
+
+    var lastSyncStatus: String
+        get() = prefs.getString(KEY_LAST_SYNC_STATUS, "NONE") ?: "NONE"
+        set(value) = prefs.edit().putString(KEY_LAST_SYNC_STATUS, value).apply()
+
+    var lastSyncMessage: String
+        get() = prefs.getString(KEY_LAST_SYNC_MESSAGE, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_SYNC_MESSAGE, value).apply()
+
+    fun addSyncLog(status: String, message: String, recordsSynced: Int = 0) {
+        try {
+            val logsRaw = prefs.getString(KEY_SYNC_LOGS, "[]") ?: "[]"
+            val array = JSONArray(logsRaw)
+
+            val logObj = JSONObject().apply {
+                put("id", UUID.randomUUID().toString())
+                put("timestamp", System.currentTimeMillis())
+                put("status", status)
+                put("message", message)
+                put("recordsSynced", recordsSynced)
+            }
+
+            val newArray = JSONArray()
+            newArray.put(logObj)
+
+            for (i in 0 until Math.min(array.length(), 29)) {
+                newArray.put(array.getJSONObject(i))
+            }
+
+            prefs.edit().putString(KEY_SYNC_LOGS, newArray.toString()).apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun getSyncLogsJson(): String {
+        return prefs.getString(KEY_SYNC_LOGS, "[]") ?: "[]"
+    }
 }
