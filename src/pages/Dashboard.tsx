@@ -386,21 +386,21 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Bar Chart Visualizer */}
         <div className="pt-4 pb-2">
-          <div className="h-44 flex items-end justify-between gap-2 sm:gap-4 px-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          <div className="h-44 grid grid-cols-7 gap-1 sm:gap-3 px-1 border-b border-zinc-200 dark:border-zinc-800 pb-2">
             {last7DaysUsage.slice().reverse().map((dayData, i) => {
               const mins = dayData.totalMinutes;
               const heightPercent = Math.max(10, Math.min(100, Math.round((mins / max7DaysMins) * 100)));
               const isToday = i === last7DaysUsage.length - 1;
 
               return (
-                <div key={dayData.date} className="flex-1 flex flex-col items-center group h-full justify-end">
+                <div key={dayData.date} className="flex flex-col items-center group h-full justify-end min-w-0">
                   {/* Tooltip on hover */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900 text-white text-[10px] px-2 py-1 rounded-md mb-1 whitespace-nowrap shadow-md pointer-events-none">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-zinc-900 text-white text-[10px] px-1.5 py-0.5 rounded mb-1 whitespace-nowrap shadow-md pointer-events-none z-10">
                     {formatMinutesToHours(mins)}
                   </div>
 
                   {/* Bar */}
-                  <div className="w-full max-w-[36px] bg-zinc-100 dark:bg-zinc-800 rounded-t-xl overflow-hidden h-full flex items-end">
+                  <div className="w-full max-w-[32px] sm:max-w-[36px] bg-zinc-100 dark:bg-zinc-800 rounded-t-xl overflow-hidden h-full flex items-end">
                     <div
                       className={`w-full rounded-t-xl transition-all duration-500 ${
                         isToday
@@ -412,9 +412,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   </div>
 
                   {/* Label */}
-                  <div className="mt-2 text-[11px] font-bold text-center text-zinc-600 dark:text-zinc-200">
-                    <div>{formatDateIndonesian(dayData.date).split(' ')[0]}</div>
-                    <div className="text-[9px] font-medium text-zinc-400 dark:text-zinc-300">
+                  <div className="mt-2 text-center w-full min-w-0">
+                    <div className="text-[10px] sm:text-[11px] font-bold text-zinc-600 dark:text-zinc-200 truncate">
+                      {formatDateIndonesian(dayData.date).split(' ')[0]}
+                    </div>
+                    <div className="text-[8px] sm:text-[9px] font-medium text-zinc-400 dark:text-zinc-300 truncate">
                       {isToday ? 'Hari ini' : formatDateIndonesian(dayData.date).split(' ')[1]}
                     </div>
                   </div>
