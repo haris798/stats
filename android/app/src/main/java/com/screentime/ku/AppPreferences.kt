@@ -16,16 +16,13 @@ class AppPreferences(context: Context) {
     }
 
     fun getDeviceId(): String {
-        var id = prefs.getString(KEY_DEVICE_ID, null)
-        if (id.isNull_or_blank()) {
-            id = "device_" + UUID.randomUUID().toString().replace("-", "").take(16)
-            prefs.edit().putString(KEY_DEVICE_ID, id).apply()
+        val existingId = prefs.getString(KEY_DEVICE_ID, null)
+        if (!existingId.isNullOrBlank()) {
+            return existingId
         }
-        return id
-    }
-
-    private fun String?.isNull_or_blank(): Boolean {
-        return this == null || this.trim().isEmpty()
+        val newId = "device_" + UUID.randomUUID().toString().replace("-", "").take(16)
+        prefs.edit().putString(KEY_DEVICE_ID, newId).apply()
+        return newId
     }
 
     var retentionDays: Int

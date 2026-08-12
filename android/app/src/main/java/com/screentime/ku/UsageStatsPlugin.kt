@@ -175,8 +175,8 @@ class UsageStatsPlugin : Plugin() {
         pluginScope.launch {
             try {
                 val prefs = AppPreferences(context)
-                if (!url.isNull_or_blank()) prefs.supabaseUrl = url
-                if (!key.isNull_or_blank()) prefs.supabaseAnonKey = key
+                if (!url.isNullOrBlank()) prefs.supabaseUrl = url
+                if (!key.isNullOrBlank()) prefs.supabaseAnonKey = key
 
                 val helper = UsageStatsManagerHelper(context)
                 val deviceId = prefs.getDeviceId()
@@ -193,8 +193,7 @@ class UsageStatsPlugin : Plugin() {
                 }
 
                 // Run sync worker logic inline for manual trigger feedback
-                val syncWorker = SyncWorker(context, androidx.work.WorkerParameters.Builder().build())
-                val syncWorkerResult = syncWorker.doWork()
+                val syncWorkerResult = SyncWorker.performSync(context)
 
                 val pendingAfter = dao.getPendingSyncCount()
 
@@ -213,9 +212,5 @@ class UsageStatsPlugin : Plugin() {
                 }
             }
         }
-    }
-
-    private fun String?.isNull_or_blank(): Boolean {
-        return this == null || this.trim().isEmpty()
     }
 }
