@@ -2,9 +2,67 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="48dp"
     android:height="48dp"
-    android:viewportWidth="48"
-    android:viewportHeight="48">
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Circular Clipping Mask Background for Round Icon -->
     <path
-        android:fillColor="#3F51B5"
-        android:pathData="M0,0h48v48h-48z"/>
+        android:fillColor="#0F172A"
+        android:pathData="M54,0 A54,54 0 1,0 54,108 A54,54 0 1,0 54,0 Z"/>
+
+    <!-- Subtle Ambient Glow -->
+    <path
+        android:fillColor="#1E1B4B"
+        android:pathData="M54,14 A40,40 0 1,0 54,94 A40,40 0 1,0 54,14 Z"/>
+
+    <!-- Phone Card Body Background -->
+    <path
+        android:fillColor="#1E293B"
+        android:pathData="M38,22 h32 a8,8 0 0 1 8,8 v48 a8,8 0 0 1 -8,8 h-32 a8,8 0 0 1 -8,-8 v-48 a8,8 0 0 1 8,-8 z"/>
+
+    <!-- Phone Outer Border -->
+    <path
+        android:strokeColor="#6366F1"
+        android:strokeWidth="2.5"
+        android:pathData="M38,22 h32 a8,8 0 0 1 8,8 v48 a8,8 0 0 1 -8,8 h-32 a8,8 0 0 1 -8,-8 v-48 a8,8 0 0 1 8,-8 z"/>
+
+    <!-- Top Speaker Pill -->
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M50,26 h8 a1,1 0 0 1 1,1 v0 a1,1 0 0 1 -1,1 h-8 a1,1 0 0 1 -1,-1 v0 a1,1 0 0 1 1,-1 z"/>
+
+    <!-- Screen Time Clock Ring -->
+    <path
+        android:strokeColor="#334155"
+        android:strokeWidth="2"
+        android:pathData="M54,32 A9,9 0 1,0 54,50 A9,9 0 1,0 54,32 Z"/>
+
+    <!-- Clock Active Arc -->
+    <path
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,32 A9,9 0 1,1 46,45"/>
+
+    <!-- Clock Center Dot & Hands -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M53,40 h2 v3 h-2 z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,40 h4 v2 h-4 z"/>
+
+    <!-- Screen Time Analytics Bar Charts -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M37,62 h5 a2,2 0 0 1 2,2 v10 a0,0 0 0 1 0,0 h-7 a0,0 0 0 1 0,0 v-10 a2,2 0 0 1 2,-2 z"/>
+    <path
+        android:fillColor="#818CF8"
+        android:pathData="M46,54 h5 a2,2 0 0 1 2,2 v18 a0,0 0 0 1 0,0 h-7 a0,0 0 0 1 0,0 v-18 a2,2 0 0 1 2,-2 z"/>
+    <path
+        android:fillColor="#F43F5E"
+        android:pathData="M55,46 h5 a2,2 0 0 1 2,2 v26 a0,0 0 0 1 0,0 h-7 a0,0 0 0 1 0,0 v-26 a2,2 0 0 1 2,-2 z"/>
+    <path
+        android:fillColor="#34D399"
+        android:pathData="M64,58 h5 a2,2 0 0 1 2,2 v14 a0,0 0 0 1 0,0 h-7 a0,0 0 0 1 0,0 v-14 a2,2 0 0 1 2,-2 z"/>
 </vector>
