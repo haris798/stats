@@ -32,12 +32,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-lg text-zinc-900 dark:text-zinc-100 tracking-tight">Stats.ku</span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+                <span className="font-bold text-lg text-zinc-900 dark:text-white tracking-tight">Stats.ku</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-500/25 dark:text-indigo-200 dark:border dark:border-indigo-500/40">
                   ScreenTime
                 </span>
               </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Offline-First App Analytics</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-300 font-medium">Offline-First App Analytics</p>
             </div>
           </div>
 
@@ -45,20 +45,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2">
             {/* Online / Offline Badge */}
             <div
-              className={`hidden sm:flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${
+              className={`hidden sm:flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${
                 syncStatus?.isOnline
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
-                  : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800'
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-200 dark:border-emerald-500/40'
+                  : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-500/20 dark:text-amber-200 dark:border-amber-500/40'
               }`}
             >
               {syncStatus?.isOnline ? (
                 <>
-                  <Wifi className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <Wifi className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-300" />
                   <span>Online</span>
                 </>
               ) : (
                 <>
-                  <WifiOff className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  <WifiOff className="w-3.5 h-3.5 text-amber-600 dark:text-amber-300" />
                   <span>Offline</span>
                 </>
               )}
@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Pending Sync Badge */}
             {syncStatus && syncStatus.pendingRecords > 0 && (
-              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-500/25 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-500/40">
                 {syncStatus.pendingRecords} pending
               </span>
             )}
@@ -88,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={onToggleTheme}
               title={theme === 'dark' ? 'Pengaturan Tema: Mode Terang' : 'Pengaturan Tema: Mode Gelap'}
               aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all cursor-pointer flex items-center justify-center ml-1"
+              className="p-2 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all cursor-pointer flex items-center justify-center ml-1"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
@@ -108,8 +108,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Dashboard"
             className={`flex items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer ${
               activeTab === 'dashboard'
-                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-600 dark:text-white shadow-xs font-bold'
+                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <LayoutDashboard className="w-5 h-5" />
@@ -122,8 +122,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="History"
             className={`flex items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer ${
               activeTab === 'history'
-                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-600 dark:text-white shadow-xs font-bold'
+                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <History className="w-5 h-5" />
@@ -136,8 +136,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="App Usage"
             className={`flex items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer ${
               activeTab === 'apps'
-                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-600 dark:text-white shadow-xs font-bold'
+                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <Layers className="w-5 h-5" />
@@ -150,8 +150,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Settings & Sync"
             className={`flex items-center justify-center p-2.5 rounded-xl transition-all cursor-pointer ${
               activeTab === 'settings'
-                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 shadow-xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50'
+                ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-600 dark:text-white shadow-xs font-bold'
+                : 'text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
           >
             <Settings className="w-5 h-5" />

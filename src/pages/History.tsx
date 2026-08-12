@@ -79,11 +79,11 @@ export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, 
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
           <div>
-            <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+            <h1 className="text-xl font-bold text-zinc-900 dark:text-white flex items-center gap-2">
               <CalendarIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               Riwayat Penggunaan Screen Time
             </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-zinc-500 dark:text-zinc-300 font-medium mt-1">
               Data tersimpan lokal di Room SQLite database
             </p>
           </div>
@@ -313,12 +313,12 @@ export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, 
                   className={`p-4 rounded-2xl border transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/20'
-                      : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 text-zinc-900 dark:text-zinc-100'
+                      : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-900 dark:text-white'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-xs font-bold ${isSelected ? 'text-indigo-100' : 'text-zinc-400'}`}>
+                      <div className={`text-xs font-bold ${isSelected ? 'text-indigo-100' : 'text-zinc-500 dark:text-zinc-300'}`}>
                         {dayName}
                       </div>
                       <div className="font-extrabold text-sm mt-0.5">
@@ -327,10 +327,10 @@ export const HistoryPage: React.FC<HistoryProps> = ({ historyDays, onSelectApp, 
                     </div>
 
                     <div className="text-right">
-                      <div className={`text-sm font-black ${isSelected ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                      <div className={`text-sm font-black ${isSelected ? 'text-white' : 'text-indigo-600 dark:text-indigo-300'}`}>
                         {formatMinutesToHours(day.totalMinutes)}
                       </div>
-                      <div className={`text-[11px] ${isSelected ? 'text-indigo-200' : 'text-zinc-400'}`}>
+                      <div className={`text-[11px] font-medium ${isSelected ? 'text-indigo-200' : 'text-zinc-500 dark:text-zinc-300'}`}>
                         {day.apps.length} aplikasi
                       </div>
                     </div>

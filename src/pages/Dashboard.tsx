@@ -76,34 +76,34 @@ export const Dashboard: React.FC<DashboardProps> = ({
   return (
     <div className="space-y-6">
       {/* Primary Screen Time Card */}
-      <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-950 via-indigo-900 to-zinc-900 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-indigo-500/30">
         {/* Abstract background decorative shapes */}
-        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute right-1/3 -top-10 w-32 h-32 bg-indigo-400/10 rounded-full blur-xl pointer-events-none" />
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute right-1/3 -top-10 w-32 h-32 bg-indigo-400/20 rounded-full blur-xl pointer-events-none" />
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold tracking-wider text-indigo-200/80 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" />
+            <span className="text-xs font-bold tracking-wider text-indigo-100 flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-indigo-300" />
               Screen Time Hari Ini
             </span>
-            <span className="text-xs font-medium px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-indigo-100">
+            <span className="text-xs font-bold px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white border border-white/20">
               {todayUsage?.date ? formatDateIndonesian(todayUsage.date) : 'Hari Ini'}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mb-4">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
+            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white drop-shadow-sm">
               {formatMinutesFull(totalMinsToday)}
             </h1>
 
             {/* Comparison Badge */}
             {totalMinsYesterday > 0 && (
               <div
-                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-md ${
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md ${
                   isMoreThanYesterday
-                    ? 'bg-amber-500/20 text-amber-200 border border-amber-500/30'
-                    : 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/30'
+                    ? 'bg-amber-500/30 text-amber-100 border border-amber-400/50'
+                    : 'bg-emerald-500/30 text-emerald-100 border border-emerald-400/50'
                 }`}
               >
                 {isMoreThanYesterday ? (
@@ -122,24 +122,24 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           {/* Stat Pill Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-indigo-700/50">
-            <div className="bg-indigo-950/40 rounded-2xl p-3 backdrop-blur-sm border border-indigo-700/30">
-              <div className="text-[11px] text-indigo-200/70 mb-0.5">Total Aplikasi</div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-indigo-600/40">
+            <div className="bg-zinc-900/80 rounded-2xl p-3 backdrop-blur-md border border-indigo-500/30">
+              <div className="text-xs text-indigo-200 font-semibold mb-0.5">Total Aplikasi</div>
               <div className="text-lg font-bold text-white flex items-center gap-1.5">
                 <AppWindow className="w-4 h-4 text-indigo-300" />
                 {todayUsage?.apps.length || 0} apps
               </div>
             </div>
 
-            <div className="bg-indigo-950/40 rounded-2xl p-3 backdrop-blur-sm border border-indigo-700/30">
-              <div className="text-[11px] text-indigo-200/70 mb-0.5">Rata-rata 7 Hari</div>
+            <div className="bg-zinc-900/80 rounded-2xl p-3 backdrop-blur-md border border-indigo-500/30">
+              <div className="text-xs text-indigo-200 font-semibold mb-0.5">Rata-rata 7 Hari</div>
               <div className="text-lg font-bold text-white">
                 {formatMinutesToHours(avg7DaysMins)}
               </div>
             </div>
 
-            <div className="bg-indigo-950/40 rounded-2xl p-3 backdrop-blur-sm border border-indigo-700/30 col-span-2 sm:col-span-1">
-              <div className="text-[11px] text-indigo-200/70 mb-0.5">Total Dibuka</div>
+            <div className="bg-zinc-900/80 rounded-2xl p-3 backdrop-blur-md border border-indigo-500/30 col-span-2 sm:col-span-1">
+              <div className="text-xs text-indigo-200 font-semibold mb-0.5">Total Dibuka</div>
               <div className="text-lg font-bold text-white">
                 {todayUsage?.apps.reduce((acc, a) => acc + (a.openCount || 0), 0) || 0}x dibuka
               </div>
@@ -152,14 +152,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-900/40">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-300 flex items-center justify-center shrink-0 border border-indigo-100 dark:border-indigo-800/60">
               <BarChart3 className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <h2 className="font-bold text-base text-zinc-900 dark:text-white flex items-center gap-2">
                 Perbandingan Rata-Rata Mingguan
               </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-zinc-500 dark:text-zinc-300 font-medium">
                 Rata-rata screen time harian minggu ini vs minggu lalu
               </p>
             </div>
@@ -171,22 +171,22 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div
                 className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
                   isAvgHigher
-                    ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/60'
+                    ? 'bg-amber-50 dark:bg-amber-950/80 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-700/80'
                     : isAvgEqual
-                    ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
-                    : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/60'
+                    ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700'
+                    : 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700/80'
                 }`}
               >
                 {isAvgHigher ? (
                   <>
-                    <ArrowUpRight className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    <ArrowUpRight className="w-4 h-4 text-amber-600 dark:text-amber-300" />
                     <span>+{weeklyPercentChange}% ({formatMinutesToHours(Math.abs(diffAvgMins))}/hari lebih tinggi)</span>
                   </>
                 ) : isAvgEqual ? (
                   <span>Penggunaan stabil (Sama dengan minggu lalu)</span>
                 ) : (
                   <>
-                    <ArrowDownRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <ArrowDownRight className="w-4 h-4 text-emerald-600 dark:text-emerald-300" />
                     <span>-{weeklyPercentChange}% ({formatMinutesToHours(Math.abs(diffAvgMins))}/hari lebih hemat)</span>
                   </>
                 )}
@@ -198,25 +198,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {/* Dual Metric Bars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           {/* Past 7 Days Metric Box */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800 rounded-2xl p-4 space-y-3">
+          <div className="bg-zinc-50 dark:bg-zinc-800/90 border border-zinc-200/80 dark:border-zinc-700/80 rounded-2xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400" />
                 Minggu Ini (7 Hari Terakhir)
               </span>
-              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+              <span className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-300">
                 Total {formatMinutesToHours(totalPastWeekMins)}
               </span>
             </div>
 
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+              <div className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
                 {formatMinutesToHours(avgPastWeekMins)}
-                <span className="text-xs font-normal text-zinc-500 dark:text-zinc-400 ml-1">/ hari</span>
+                <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-300 ml-1">/ hari</span>
               </div>
             </div>
 
-            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700/60 h-2.5 rounded-full overflow-hidden">
+            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700 h-2.5 rounded-full overflow-hidden">
               <div
                 className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-all duration-500"
                 style={{ width: `${pastWeekBarWidth}%` }}
@@ -225,27 +225,27 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           {/* Previous 7 Days Metric Box */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-800 rounded-2xl p-4 space-y-3">
+          <div className="bg-zinc-50 dark:bg-zinc-800/90 border border-zinc-200/80 dark:border-zinc-700/80 rounded-2xl p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+              <span className="text-xs font-bold text-zinc-700 dark:text-zinc-200 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-400" />
                 Minggu Lalu (Hari 8-14)
               </span>
-              <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+              <span className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-300">
                 Total {formatMinutesToHours(totalPrevWeekMins)}
               </span>
             </div>
 
             <div className="flex items-baseline justify-between">
-              <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">
+              <div className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
                 {formatMinutesToHours(avgPrevWeekMins)}
-                <span className="text-xs font-normal text-zinc-500 dark:text-zinc-400 ml-1">/ hari</span>
+                <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-300 ml-1">/ hari</span>
               </div>
             </div>
 
-            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700/60 h-2.5 rounded-full overflow-hidden">
+            <div className="w-full bg-zinc-200/80 dark:bg-zinc-700 h-2.5 rounded-full overflow-hidden">
               <div
-                className="h-full bg-zinc-400 dark:bg-zinc-500 rounded-full transition-all duration-500"
+                className="h-full bg-zinc-400 dark:bg-zinc-400 rounded-full transition-all duration-500"
                 style={{ width: `${prevWeekBarWidth}%` }}
               />
             </div>
@@ -254,9 +254,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Insight Callout */}
         {avgPrevWeekMins > 0 && (
-          <div className="bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-3.5 flex items-start gap-3">
-            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+          <div className="bg-indigo-50/70 dark:bg-indigo-950/80 border border-indigo-100 dark:border-indigo-800/80 rounded-2xl p-3.5 flex items-start gap-3">
+            <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-300 shrink-0 mt-0.5" />
+            <p className="text-xs text-zinc-700 dark:text-zinc-100 font-medium leading-relaxed">
               {isAvgHigher ? (
                 <>
                   Rata-rata penggunaan HP Anda minggu ini naik{' '}
@@ -268,7 +268,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               ) : isAvgEqual ? (
                 <>
                   Rata-rata screen time harian Anda stabil di angka{' '}
-                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                  <span className="font-bold text-indigo-600 dark:text-indigo-300">
                     {formatMinutesToHours(avgPastWeekMins)} per hari
                   </span>
                   , sama dengan minggu sebelumnya.
@@ -291,18 +291,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300 flex items-center justify-center border border-transparent dark:border-indigo-800/60">
               <Award className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">Top Aplikasi Hari Ini</h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Penggunaan screen time tertinggi</p>
+              <h2 className="font-bold text-base text-zinc-900 dark:text-white">Top Aplikasi Hari Ini</h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-300 font-medium">Penggunaan screen time tertinggi</p>
             </div>
           </div>
 
           <button
             onClick={onNavigateHistory}
-            className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 flex items-center gap-1 cursor-pointer"
+            className="text-xs font-bold text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 flex items-center gap-1 cursor-pointer"
           >
             <span>Lihat Semua</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -310,7 +310,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
 
         {topAppsToday.length === 0 ? (
-          <div className="text-center py-8 text-zinc-400 dark:text-zinc-500 text-xs">
+          <div className="text-center py-8 text-zinc-400 dark:text-zinc-400 text-xs font-medium">
             Belum ada data statistik aplikasi hari ini.
           </div>
         ) : (
@@ -324,29 +324,29 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <div
                   key={app.packageName}
                   onClick={() => onSelectApp(app)}
-                  className="p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-all cursor-pointer border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
+                  className="p-3 rounded-2xl hover:bg-zinc-50 dark:hover:bg-zinc-800/80 transition-all cursor-pointer border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-zinc-400 w-4 text-center">#{idx + 1}</span>
+                      <span className="text-xs font-bold text-zinc-400 dark:text-zinc-300 w-4 text-center">#{idx + 1}</span>
                       <div className={`w-9 h-9 rounded-xl ${meta.iconBg} flex items-center justify-center font-bold text-sm shrink-0`}>
                         {app.appName.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                        <div className="font-semibold text-sm text-zinc-900 dark:text-white flex items-center gap-2">
                           <span>{app.appName}</span>
-                          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-200 border dark:border-zinc-700">
                             {meta.category}
                           </span>
                         </div>
-                        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                        <div className="text-xs text-zinc-500 dark:text-zinc-300 font-medium">
                           {app.openCount ? `${app.openCount}x dibuka • ` : ''}{percent}% dari total
                         </div>
                       </div>
                     </div>
 
                     <div className="text-right">
-                      <div className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+                      <div className="font-bold text-sm text-zinc-900 dark:text-white">
                         {formatMinutesToHours(app.usageMinutes)}
                       </div>
                     </div>
@@ -370,16 +370,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300 flex items-center justify-center border border-transparent dark:border-indigo-800/60">
               <Calendar className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="font-bold text-base text-zinc-900 dark:text-zinc-100">Tren Penggunaan 7 Hari</h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Statistik harian mingguan Anda</p>
+              <h2 className="font-bold text-base text-zinc-900 dark:text-white">Tren Penggunaan 7 Hari</h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-300 font-medium">Statistik harian mingguan Anda</p>
             </div>
           </div>
 
-          <div className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded-full">
+          <div className="text-xs font-bold text-zinc-700 dark:text-zinc-200 bg-zinc-100 dark:bg-zinc-800 border dark:border-zinc-700 px-3 py-1 rounded-full">
             Rata-rata: {formatMinutesToHours(avg7DaysMins)} / hari
           </div>
         </div>
@@ -405,16 +405,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       className={`w-full rounded-t-xl transition-all duration-500 ${
                         isToday
                           ? 'bg-gradient-to-t from-indigo-600 to-indigo-500'
-                          : 'bg-indigo-200 dark:bg-indigo-900/60 group-hover:bg-indigo-400'
+                          : 'bg-indigo-200 dark:bg-indigo-600/70 group-hover:bg-indigo-400'
                       }`}
                       style={{ height: `${heightPercent}%` }}
                     />
                   </div>
 
                   {/* Label */}
-                  <div className="mt-2 text-[11px] font-medium text-center text-zinc-500 dark:text-zinc-400">
+                  <div className="mt-2 text-[11px] font-bold text-center text-zinc-600 dark:text-zinc-200">
                     <div>{formatDateIndonesian(dayData.date).split(' ')[0]}</div>
-                    <div className="text-[9px] text-zinc-400 dark:text-zinc-500">
+                    <div className="text-[9px] font-medium text-zinc-400 dark:text-zinc-300">
                       {isToday ? 'Hari ini' : formatDateIndonesian(dayData.date).split(' ')[1]}
                     </div>
                   </div>

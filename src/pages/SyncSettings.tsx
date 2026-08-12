@@ -203,7 +203,7 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
 
             <form onSubmit={handleSaveCredentials} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1">
                   Supabase URL
                 </label>
                 <input
@@ -211,12 +211,12 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
                   placeholder="https://your-project.supabase.co"
                   value={supabaseUrl}
                   onChange={(e) => setSupabaseUrl(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-zinc-900 dark:text-zinc-100"
+                  className="w-full px-3.5 py-2.5 text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-zinc-900 dark:text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                <label className="block text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1">
                   Supabase Anon Key (Public Client Key)
                 </label>
                 <input
@@ -224,10 +224,10 @@ export const SyncSettings: React.FC<SyncSettingsProps> = ({
                   placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                   value={supabaseAnonKey}
                   onChange={(e) => setSupabaseAnonKey(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-zinc-900 dark:text-zinc-100"
+                  className="w-full px-3.5 py-2.5 text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-zinc-900 dark:text-white"
                 />
-                <p className="text-[11px] text-zinc-400 mt-1">
-                  ⚠️ Jangan pernah memasukkan <span className="font-semibold text-amber-600 dark:text-amber-400">SUPABASE_SERVICE_ROLE_KEY</span> ke dalam aplikasi APK/Client.
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-300 font-medium mt-1">
+                  ⚠️ Jangan pernah memasukkan <span className="font-bold text-amber-600 dark:text-amber-300">SUPABASE_SERVICE_ROLE_KEY</span> ke dalam aplikasi APK/Client.
                 </p>
               </div>
 

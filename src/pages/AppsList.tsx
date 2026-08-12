@@ -178,8 +178,8 @@ export const AppsList: React.FC<AppsListProps> = ({ todayUsage, onSelectApp, onS
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-2 text-xs font-semibold rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100'
+                  ? 'bg-indigo-600 text-white shadow-sm font-bold'
+                  : 'bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-semibold'
               }`}
             >
               {cat}
