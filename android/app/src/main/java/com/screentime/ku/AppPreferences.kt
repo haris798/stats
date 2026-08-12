@@ -2,9 +2,10 @@ package com.screentime.ku
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.provider.Settings
 import java.util.UUID
 
-class AppPreferences(context: Context) {
+class AppPreferences(private val context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("screentime_prefs", Context.MODE_PRIVATE)
 
     companion object {
@@ -20,9 +21,21 @@ class AppPreferences(context: Context) {
         if (!existingId.isNullOrBlank()) {
             return existingId
         }
-        val newId = "device_" + UUID.randomUUID().toString().replace("-", "").take(16)
-        prefs.edit().putString(KEY_DEVICE_ID, newId).apply()
-        return newId
+
+        val realAndroidId = try {
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        } catch (e: Exception) {
+            null
+        }
+
+        val deviceId = if (!realAndroidId.isNullOrBlank() && realAndroidId != "9774d56d682e549c") {
+            "android_$realAndroidId"
+        } else {
+            "device_" + UUID.randomUUID().toString().replace("-", "").take(16)
+        }
+
+        prefs.edit().putString(KEY_DEVICE_ID, deviceId).apply()
+        return deviceId
     }
 
     var retentionDays: Int
